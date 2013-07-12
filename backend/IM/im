@@ -1,0 +1,121 @@
+#! /bin/bash
+
+### BEGIN INIT INFO
+# Provides:          coordinateDB
+# Required-Start:    $all
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start Coordinate Database.
+# Description:       Start Coordinate Database.
+### END INIT INFO
+
+### Variables
+#
+
+PRG=$(basename "$0")
+PID_DIRECTORY="/var/run"
+JAVA="/usr/lib64/java/bin/java"
+
+### Configuration
+#
+# Several configurations for the service
+#
+
+JVM_CONF="-server -Xmx1g -XX:+UseG1GC"
+
+### Change directory
+#
+# Resolve the symbolic link and change to the correct directory
+#
+
+WORK_DIR="$(dirname "$0")"
+cd $WORK_DIR
+LS="$(ls -ld "$PRG")"
+LINK="$(expr "$LS" : '.*-> \(.*\)$')"
+if expr "$LINK" : '.*/.*' > /dev/null; then
+    WORK_DIR="$(dirname $LINK)"
+    PRG="$(basename "$LINK")"
+    cd $WORK_DIR
+fi
+
+PIDFILE="$PID_DIRECTORY/$PRG.pid"
+
+### isRunning fucntion
+#
+function isRunning()
+{
+    [[ ! -f "$PIDFILE" ]] && return 1
+    PID="$(<"$PIDFILE")"
+    [[ -z "$PID" ]] && return 1
+    [[ ! $(ps -p $PID | grep $PID) == "" ]] && RV=0 || RV=1
+    return $RV
+}
+
+### Start function
+#
+function start()
+{
+    isRunning
+    STATUS=$?
+    if [[ $STATUS -eq 0 ]]; then
+        echo -e "Service $PRG is already running."
+    else
+        echo -e "Starting service $PRG"
+        $JAVA $JVM_CONF -jar $PRG.jar > /tmp/$PRG.out 2>&1 &
+        PID=$!
+        echo "$PID" > "$PIDFILE"
+    fi
+}
+
+### Stop function
+#
+function stop()
+{
+    isRunning
+    STATUS=$?
+    if [[ $STATUS -eq 0 ]]; then
+        echo -e "Stoping service $PRG"
+        PID="$(<"$PIDFILE")"
+        kill $PID
+        rm $PIDFILE
+    else
+        echo -e "Service $PRG not running."
+    fi
+}
+
+### Status function
+#
+function status()
+{
+    isRunning
+    STATUS=$?
+    if [[ $STATUS -eq 0 ]]; then
+        echo -e "Service $PRG is running"
+    else
+        echo -e "Service $PRG is not running."
+    fi
+}
+
+case "$1" in
+start)
+    start
+    ;;
+stop)
+    stop
+    ;;
+restart)
+    stop
+    sleep 1
+    start
+    ;;
+status)
+    status
+    ;;
+*)
+    echo "Usage: $0 {start|stop|restart|status}"
+    exit 1
+    ;;
+esac
+
+exit 0
