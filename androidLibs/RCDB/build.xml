@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="HTTP" default="dist">
+<project name="RCDB" default="dist">
 	<description>
-            Basic HTTP library.
+            Coordinate DataBase.
     </description>
 
 	<property name="src" location="src" />
@@ -10,8 +10,22 @@
 	<property name="target" value="1.6" />
 	<property name="source" value="1.6" />
 
+	<!-- Define the location of the External Libraries -->
+	<property name="libs.path" value="../../../library" />
+	<property name="json.path" value="${libs.path}/json/" />
+	<property name="http.path" value="${libs.path}/http/" />
+
+	<!-- Project classpath -->
+	<path id="json">
+		<fileset dir="${json.path}" />
+	</path>
+	<path id="http">
+		<fileset dir="${http.path}" />
+	</path>
 	<path id="project.classpath">
 		<pathelement location="bin" />
+		<path refid="json" />
+		<path refid="http" />
 	</path>
 
 	<!-- Clean Rule -->
@@ -34,9 +48,9 @@
 	</target>
 
 	<!-- Dist Rule -->
-	<target name="http" depends="compile" description="pack a jar for Adapter library">
-		<jar jarfile="${dist}/http.jar" basedir="${build}" />
+	<target name="rcdb" depends="compile" description="pack a jar for Adapter library">
+		<jar jarfile="${dist}/rcdb" basedir="${build}" />
 	</target>
 
-	<target name="dist" depends="http" />
+	<target name="dist" depends="rcdb" />
 </project>
