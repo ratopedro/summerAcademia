@@ -17,8 +17,7 @@ public class MainActivity extends FragmentActivity {
 
 		requestWindowFeature(Window.FEATURE_LEFT_ICON);
 		setContentView(R.layout.activity_main);
-		setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
-				R.drawable.ic_launcher);
+		setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_launcher);
 
 		if (findViewById(R.id.fragment_container) != null) {
 			if (savedInstanceState != null) {
