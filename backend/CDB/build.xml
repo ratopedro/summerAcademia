@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CDB" default="dist">
+	<description>
+            Coordinate DataBase.
+    </description>
+
+	<property name="src" location="src" />
+	<property name="build" location="bin" />
+	<property name="dist" location="dist" />
+	<property name="target" value="1.7" />
+	<property name="source" value="1.7" />
+
+	<!-- Define the location of the External Libraries -->
+	<property name="json.path" value="../library/json/" />
+	<property name="zmq.path" value="../library/zmq/" />
+
+	<!-- Project classpath -->
+	<path id="json">
+		<fileset dir="${json.path}" />
+	</path>
+	<path id="zmq">
+		<fileset dir="${zmq.path}" />
+	</path>
+	<path id="project.classpath">
+		<pathelement location="bin" />
+		<path refid="json" />
+		<path refid="zmq" />
+	</path>
+
+	<!-- Clean Rule -->
+	<target name="clean" description="clean up">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+
+	<!-- Init Rule -->
+	<target name="init" depends="clean">
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+	</target>
+
+	<!-- Compile Rule -->
+	<target name="compile" depends="init" description="compile the source">
+		<javac srcdir="${src}" destdir="${build}" includeantruntime="false" source="${source}" target="${target}">
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<!-- Dist Rule -->
+	<target name="cdb" depends="compile" description="pack a jar for the CDB service">
+		<!-- Pack a jar with all the external libraries -->
+		<jar jarfile="${dist}/external-libs.jar">
+			<zipgroupfileset excludes="META-INF/*.SF" dir="${json.path}" includes="*.jar" />
+			<zipgroupfileset excludes="META-INF/*.SF" dir="${zmq.path}" includes="*.jar" />
+		</jar>
+		<!-- Pack the final jar -->
+		<jar jarfile="${dist}/cdb.jar" basedir="${build}">
+			<manifest>
+				<attribute name="Main-Class" value=" pt.it.av.atnog.funNet.cdb.CDBServer" />
+				<attribute name="Class-Path" value="." />
+			</manifest>
+			<zipfileset src="${dist}/external-libs.jar" />
+		</jar>
+		<!-- Delete the external libraries jar -->
+		<delete file="${dist}/external-libs.jar" />
+	</target>
+
+	<target name="cdbClient" depends="compile" description="pack a jar for Adapter library">
+		<jar jarfile="${dist}/cdbClient.jar" basedir="${build}" />
+	</target>
+
+	<target name="dist" depends="cdb, cdbClient" />
+</project>

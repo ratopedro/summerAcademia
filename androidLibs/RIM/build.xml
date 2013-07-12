@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="RCDB" default="dist">
+<project name="RIM" default="dist">
 	<description>
-            Coordinate DataBase Android Client.
+            Instant Messaging Android Client.
     </description>
 
 	<property name="src" location="src" />
@@ -48,9 +48,9 @@
 	</target>
 
 	<!-- Dist Rule -->
-	<target name="rcdb" depends="compile" description="pack a jar for Adapter library">
-		<jar jarfile="${dist}/rcdb.jar" basedir="${build}" />
+	<target name="rim" depends="compile" description="pack a jar for Adapter library">
+		<jar jarfile="${dist}/rim.jar" basedir="${build}" />
 	</target>
 
-	<target name="dist" depends="rcdb" />
+	<target name="dist" depends="rim" />
 </project>
