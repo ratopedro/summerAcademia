@@ -36,20 +36,21 @@ public class CDB implements ICDB {
 
 		try {
 			json.put("success", true);
-
 			Set<String> keys = map.keySet();
 			Iterator<String> it = keys.iterator();
-
 			while (it.hasNext()) {
 				String usr = it.next();
 				VolatileCoordinate c = map.get(usr);
 				if (c != null
-						&& (System.currentTimeMillis() - c.timestamp() < ttl))
-					array.put(new JSONObject("{\"usr\":\"" + usr
-							+ "\",\"lat\":" + c.latitude() + ",\"lon\":"
-							+ c.longitude() + "}"));
-				else if(c != null)
+						&& (System.currentTimeMillis() - c.timestamp() < ttl)) {
+					JSONObject jcoor = new JSONObject();
+					jcoor.put("usr", usr);
+					jcoor.put("lat", c.latitude());
+					jcoor.put("lon", c.longitude());
+					array.put(jcoor);
+				} else {
 					map.remove(usr);
+				}
 			}
 			json.put("cdb", array);
 		} catch (JSONException e) {

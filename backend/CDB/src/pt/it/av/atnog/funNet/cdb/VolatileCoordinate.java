@@ -5,6 +5,7 @@ public class VolatileCoordinate {
 	private long timestamp;
 
 	public VolatileCoordinate(double latitude, double longitude) {
+		this.timestamp = System.currentTimeMillis();
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}

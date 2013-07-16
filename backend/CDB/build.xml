@@ -11,8 +11,9 @@
 	<property name="source" value="1.7" />
 
 	<!-- Define the location of the External Libraries -->
-	<property name="json.path" value="../library/json/" />
-	<property name="zmq.path" value="../library/zmq/" />
+	<property name="libs.path" value="../../../library" />
+	<property name="json.path" value="${libs.path}/json/" />
+	<property name="zmq.path" value="${libs.path}/zmq/" />
 
 	<!-- Project classpath -->
 	<path id="json">

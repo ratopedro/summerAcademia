@@ -26,9 +26,7 @@ public class CDBServer {
 		CDB cdb = new CDB();
 		ZMQ.Context context = ZMQ.context(1);
 		ZMQ.Socket socket = context.socket(ZMQ.REP);
-
 		socket.bind("tcp://*:33665");
-
 		while (!done) {
 			Message msg = MessageFactory.parse(socket.recv(0)), reply = null;
 			if (msg.type().equals(Message.typeMessageSetCoordinateRequest)) {
