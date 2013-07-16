@@ -113,18 +113,20 @@ public class CDB implements Runnable {
 					JSONArray array = json.getJSONArray("cdb");
 					synchronized (mutex) {
 						map.clear();
+
 						for (int i = 0; i < array.length(); i++) {
 							JSONObject j = array.getJSONObject(i);
 							map.put(j.getString("usr"),
 									new Coordinate(j.getDouble("lat"), j
 											.getDouble("lon")));
 						}
+
+						if (c != null)
+							map.put(usr, c);
 					}
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(0);
 		}
 	}
 

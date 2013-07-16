@@ -4,7 +4,7 @@
 #
 SERVICE="im"
 REMOTE_PATH="/opt/$SERVICE/"
-HOSTNAME="funnet"
+HOSTNAME="atnog-funnet"
 PORT="22"
 USERNAME="root"
 
@@ -18,7 +18,7 @@ ant -f build.xml
 echo
 
 echo "Synchronize server $HOSTNAME:$REMOTE_PATH"
-rsync -av --progress --inplace --rsh="ssh -p$PORT" dist/cdb.jar cdb \
+rsync -av --progress --inplace --rsh="ssh -p$PORT" dist/$SERVICE.jar $SERVICE \
 ${USERNAME}@${HOSTNAME}:${REMOTE_PATH}
 echo
 

@@ -3,7 +3,7 @@ package pt.it.av.atnog.funNet.cdb;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,20 +36,18 @@ public class CDB implements ICDB {
 
 		try {
 			json.put("success", true);
-			Set<String> keys = map.keySet();
-			Iterator<String> it = keys.iterator();
+			Iterator<Entry<String, VolatileCoordinate>> it = map.entrySet()
+					.iterator();
 			while (it.hasNext()) {
-				String usr = it.next();
-				VolatileCoordinate c = map.get(usr);
-				if (c != null
-						&& (System.currentTimeMillis() - c.timestamp() < ttl)) {
+				Entry<String, VolatileCoordinate> val = it.next();
+				if (System.currentTimeMillis() - val.getValue().timestamp() < ttl) {
 					JSONObject jcoor = new JSONObject();
-					jcoor.put("usr", usr);
-					jcoor.put("lat", c.latitude());
-					jcoor.put("lon", c.longitude());
+					jcoor.put("usr", val.getKey());
+					jcoor.put("lat", val.getValue().latitude());
+					jcoor.put("lon", val.getValue().longitude());
 					array.put(jcoor);
 				} else {
-					map.remove(usr);
+					it.remove();
 				}
 			}
 			json.put("cdb", array);

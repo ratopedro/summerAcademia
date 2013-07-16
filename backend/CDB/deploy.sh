@@ -23,8 +23,8 @@ ${USERNAME}@${HOSTNAME}:${REMOTE_PATH}
 echo
 
 echo "Restart $SERVICE"
-ssh -p $PORT -l$USERNAME $HOSTNAME "exec insserv $REMOTE_PATH/$SERVICE; \
-exec service $SERVICE restart"
+ssh -p $PORT -l$USERNAME $HOSTNAME "exec insserv $REMOTE_PATH/$SERVICE"
+ssh -p $PORT -l$USERNAME $HOSTNAME  "exec service $SERVICE restart"
 echo
 
 STOP=$(date +%s)

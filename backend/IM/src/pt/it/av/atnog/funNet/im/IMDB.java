@@ -17,7 +17,7 @@ public class IMDB implements IIM {
 		for (int i = 0; i < txt.size(); i++)
 			msgs.add(new ShortMessage(usr, txt.get(i)));
 
-		int diff = msgs.size() + 1 - nMaxMsgs;
+		int diff = msgs.size() - nMaxMsgs;
 
 		for (int i = 0; i < diff; i++)
 			msgs.remove(0);

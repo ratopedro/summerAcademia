@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="cdbws" default="dist">
+<project name="imws" default="dist">
 	<description>
-		Coordinate DataBase WebService.
+    	Instant Messaging WebService.
     </description>
 
 	<property name="src" location="src" />
@@ -40,7 +40,7 @@
 
 	<!-- Dist Rule -->
 	<target name="dist" depends="compile">
-		<war destfile="${dist}/cdbws.war" webxml="WebContent/WEB-INF/web.xml" update="true">
+		<war destfile="${dist}/imws.war" webxml="WebContent/WEB-INF/web.xml" update="true">
 			<classes dir="${build}" />
 			<fileset dir="WebContent">
 				<exclude name="WEB-INF/web.xml" />
